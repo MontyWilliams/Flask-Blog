@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 """ This module provides our app with forms
     the syntax will be diff than regular html
@@ -18,4 +18,4 @@ class RegistrationForm(FlaskForm):
                            validators=[DataRequired(), Length(min=2, max=20)])
     confirm_password = PasswordField('Confirm Password',
                            validators=[DataRequired(), EqualTo('password')])
-    
+    submit = SubmitField('Signup Bruh')    
