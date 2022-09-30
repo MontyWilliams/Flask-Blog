@@ -1,8 +1,18 @@
 body {
     background: #fafafa;
-    color: #333333;
+    color: #574646;
     margin-top: 5rem;
   }
+
+  #myVideo {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1000;
+  }
+  
   
   h1, h2, h3, h4, h5, h6 {
     color: #444444;
