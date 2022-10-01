@@ -36,7 +36,7 @@ def about():
     return render_template('about.html', title='About')
 
 
-@app.route("/register" , methods=['GET', 'POST'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
     """ reate instance of RegistrationForm & pass it to the template
     """
@@ -47,13 +47,17 @@ def register():
     return render_template('registration.html', title='Register Bruh', form=form)
 
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     """ reate instance of LoginForm & pass it to the template
     """
     form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+            flash('Login successful!')
+            return redirect(url_fot('home'))
     return render_template('login.html', title='Login Bruh', form=form)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

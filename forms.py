@@ -20,7 +20,7 @@ class RegistrationForm(FlaskForm):
                            validators=[DataRequired(), Length(min=2, max=20)])
     confirm_password = PasswordField('Confirm Password',
                            validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Signup Bruh')    
+    submit = SubmitField('Signup')    
 
 class LoginForm(FlaskForm):
     """ Similar to the RegistrationForm bu used for login instead
@@ -31,4 +31,4 @@ class LoginForm(FlaskForm):
                            validators=[DataRequired(), Length(min=2, max=20)])
     remember = BooleanField('Remember Me')
     
-    submit = SubmitField('Signup Bruh')
+    submit = SubmitField('Signup')

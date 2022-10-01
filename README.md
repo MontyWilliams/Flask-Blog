@@ -11,3 +11,13 @@ To add to the configuration of an app use:
 ```
 app.config
 ```
+
+## Helpful for server
+If the server won't reset use this bash cmd to reset it
+```
+kill -9 $(ps -A | grep python | awk '{print $1}') 
+```
+If styling wont update use this to reset cahche in browser
+```
+ctrl+shift+r 
+```
