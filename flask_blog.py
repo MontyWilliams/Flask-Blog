@@ -55,7 +55,9 @@ def login():
     if form.validate_on_submit():
         if form.email.data == 'admin@blog.com' and form.password.data == 'password':
             flash('Login successful!')
-            return redirect(url_fot('home'))
+            return redirect(url_for('home'))
+        else:
+            flash('Login failed! U tryna hack the page Bru?', 'danger')
     return render_template('login.html', title='Login Bruh', form=form)
 
 
