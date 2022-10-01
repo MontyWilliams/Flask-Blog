@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, url_for, flash
+from flask import Flask, render_template, url_for, flash, redirect
 from forms import RegistrationForm, LoginForm
 """ This ia the index page equivalent for flask.
     all of the routes are defined here but built inside templates.
@@ -42,7 +42,8 @@ def register():
     """
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'Got you in registered as {form.username.data}!')
+        flash(f'Got you registered as {form.username.data}!', 'sucess')
+        return redirect(url_for('home'))
     return render_template('registration.html', title='Register Bruh', form=form)
 
 
