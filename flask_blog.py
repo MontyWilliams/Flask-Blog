@@ -7,8 +7,7 @@ from forms import RegistrationForm, LoginForm
     like the main app files in React.
 """
 app = Flask(__name__)
-
-app.config['SECRET_kEY'] = '4a99b4432d537074f1a38919076236d1'
+app.config['SECRET_KEY'] = '4a99b4432d537074f1a38919076236d1'
 
 posts = [
     {
@@ -42,7 +41,7 @@ def register():
     """ reate instance of RegistrationForm & pass it to the template
     """
     form = RegistrationForm()
-    return render_template('register.html', title='Register Bruh', form=form)
+    return render_template('registration.html', title='Register Bruh', form=form)
 
 
 @app.route("/login")
