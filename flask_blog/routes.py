@@ -1,6 +1,6 @@
 #!/usr/bin/env python 3
 from flask_blog.models import User, Post
-from flask_blog import app
+from flask_blog import app, db, bcrypt
 from flask import render_template, url_for, flash, redirect
 from flask_blog.forms import RegistrationForm, LoginForm
 
@@ -37,12 +37,17 @@ def about():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
-    """ reate instance of RegistrationForm & pass it to the template
+    """ Create instance of RegistrationForm & pass it to the template
+        use bcrypt to generate password hash
     """
     form = RegistrationForm()
     if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
         flash(f'Got you registered as {form.username.data}!', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     return render_template('registration.html', title='Register Bruh', form=form)
 
 
