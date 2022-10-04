@@ -78,6 +78,6 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@pp.route("/account")
+@app.route("/account")
 def account():
     return render_template('account.html', tittle="Account")
