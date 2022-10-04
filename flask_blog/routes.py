@@ -3,7 +3,7 @@ from flask_blog.models import User, Post
 from flask_blog import app, db, bcrypt
 from flask import render_template, url_for, flash, redirect
 from flask_blog.forms import RegistrationForm, LoginForm
-from flask_login import login_user, current_user, logout_user
+from flask_login import login_user, current_user, logout_user, login_required
 
 """ This is the routing page for the new modular design
 """
@@ -79,5 +79,6 @@ def logout():
     return redirect(url_for('home'))
 
 @app.route("/account")
+@login_required
 def account():
     return render_template('account.html', tittle="Account")
