@@ -3,6 +3,7 @@ from flask_blog.models import User, Post
 from flask_blog import app, db, bcrypt
 from flask import render_template, url_for, flash, redirect
 from flask_blog.forms import RegistrationForm, LoginForm
+from flask_login import login_user
 
 """ This is the routing page for the new modular design
 """
@@ -59,6 +60,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
-            
+            login_user(user, remember=form.remember.data)
+            return redirect(url_for('home'))
         flash('Login failed! U tryna hack the page Bru?', 'danger')
     return render_template('login.html', title='Login Bruh', form=form)
