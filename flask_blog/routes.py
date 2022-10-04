@@ -62,5 +62,6 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             return redirect(url_for('home'))
-        flash('Login failed! U tryna hack the page Bru?', 'danger')
+        else:
+            flash('Login failed! U tryna hack the page Bru?', 'danger')
     return render_template('login.html', title='Login Bruh', form=form)
