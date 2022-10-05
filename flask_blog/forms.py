@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from flask_blog.models import User
@@ -46,7 +47,7 @@ class LoginForm(FlaskForm):
     
     submit = SubmitField('Signup')
 
-class UpdateAccount(FlaskForm):
+class UpdateAccountForm(FlaskForm):
     """ This class provides all the functionality needed to update 
         the user account settings
     """
@@ -54,6 +55,7 @@ class UpdateAccount(FlaskForm):
                            validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
+    picture = FileField('update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
 
     def validate_username(self, username):
