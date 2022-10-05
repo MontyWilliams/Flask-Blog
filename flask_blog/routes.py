@@ -1,4 +1,5 @@
 #!/usr/bin/env python 3
+from crypt import methods
 from flask_blog.models import User, Post
 from flask_blog import app, db, bcrypt
 from flask import render_template, url_for, flash, redirect, request
@@ -79,9 +80,15 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route("/account")
+@app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
     form = UpdateAccountForm()
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Account updated successfully' 'success')
+        return redirect(url_for('account'))
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', tittle="Account", image_file=image_file, form=form)
