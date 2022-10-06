@@ -60,7 +60,7 @@ def register():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
-    """ reate instance of LoginForm & pass it to the template
+    """ Create instance of LoginForm & pass it to the template
     """
     if current_user.is_authenticated:
         flash('You already logged in Hommie', 'danger')
@@ -99,7 +99,8 @@ def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
         if form.picture.data:
-            pass
+            picture_file = save_picture(form.picture.data)
+            current_user.imagefile = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
