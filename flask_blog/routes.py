@@ -2,31 +2,17 @@
 from crypt import methods
 import secrets
 import os
+from turtle import title
 from PIL import Image
+from requests import post
 from flask_blog.models import User, Post
 from flask_blog import app, db, bcrypt
 from flask import render_template, url_for, flash, redirect, request
-from flask_blog.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from flask_blog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from flask_login import login_user, current_user, logout_user, login_required
 
 """ This is the routing page for the new modular design
 """
-
-
-posts = [
-    {
-        'author': 'Monty',
-        'title': 'Blog this!',
-        'content': 'This is my blog Bro!',
-        'date_posted': '100 in the future Bruh'
-    },
-    {
-        'author': 'Twill',
-        'title': 'Blog that!',
-        'content': 'This is my Bro\'s blog Bro!',
-        'date_posted': '100 in the past hommie'
-    }
-]
 
 
 @app.route("/")
@@ -117,3 +103,16 @@ def account():
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', tittle="Account", image_file=image_file, form=form)
+
+
+@app.route("/post/new", methods=['POST', 'GET'])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.tittle.data, content=form.content.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Congrats Bro, Post success!', 'success')
+        return redirect(url_for('home'))
+    return render_template('create_post.html', tittle="New Post", form=form)
