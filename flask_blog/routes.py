@@ -2,7 +2,6 @@
 from crypt import methods
 import secrets
 import os
-from turtle import title
 from PIL import Image
 from requests import post
 from flask_blog.models import User, Post
@@ -111,9 +110,9 @@ def account():
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.tittle.data, content=form.content.data, author=current_user)
+        post = Post(title=form.title.data, content=form.content.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash('Congrats Bro, Post success!', 'success')
         return redirect(url_for('home'))
-    return render_template('create_post.html', tittle="New Post", form=form)
+    return render_template('create_post.html', title="New Post", form=form)
