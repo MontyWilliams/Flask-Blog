@@ -140,5 +140,7 @@ def update_post(post_id):
         post.title = form.title.data
         post.content = form.content.data
         db.session.commit()
+        flash('Your Post has been updated!' , 'success')
+        return redirect(url_for('post', post_id=post.id))
     return render_template('create_post.html', title='Update Post',
                            form=form, legend='update_post')
