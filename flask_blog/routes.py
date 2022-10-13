@@ -6,7 +6,7 @@ from PIL import Image
 from requests import post
 from flask_blog.models import User, Post
 from flask_blog import app, db, bcrypt
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from flask_blog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -120,5 +120,19 @@ def new_post():
 
 @app.route("/post/<int:post_id>")
 def post(post_id):
-    pos = Post.query.get_or_404(post_id)
+    post = Post.query.get_or_404(post_id)
     return render_template('post.html', title=post.title, post=post)
+
+
+@app.route("/post/<int:post_id>/update")
+@login_required
+def update_post(post_id):
+    """ Update the post using post_id
+        flack models used to hold state so we can call
+        anythin in the db models as we would using context in react
+    """
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+    form = PostForm()
+    return render_template('create_post.html', title='Update Post', form=form)
