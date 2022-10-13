@@ -6,6 +6,7 @@ from PIL import Image
 from requests import post
 from flask_blog.models import User, Post
 from flask_blog import app, db, bcrypt
+from flask_cors import CORS
 from flask import render_template, url_for, flash, redirect, request, abort
 from flask_blog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from flask_login import login_user, current_user, logout_user, login_required
@@ -13,7 +14,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 """ This is the routing page for the new modular design
 """
 
-
+CORS(app)
 @app.route("/")
 @app.route("/home")
 def home():
@@ -125,7 +126,7 @@ def post(post_id):
     return render_template('post.html', title=post.title, post=post)
 
 
-@app.route("/post/<int:post_id>/update")
+@app.route("/<int:post_id>/update", methods=['GET', 'POST'])
 @login_required
 def update_post(post_id):
     """ Update the post using post_id
@@ -140,7 +141,10 @@ def update_post(post_id):
         post.title = form.title.data
         post.content = form.content.data
         db.session.commit()
-        flash('Your Post has been updated!' , 'success')
+        flash('Your Post has been updated!', 'success')
         return redirect(url_for('post', post_id=post.id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
     return render_template('create_post.html', title='Update Post',
-                           form=form, legend='update_post')
+                           form=form, legend='Update Post')
