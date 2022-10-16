@@ -18,7 +18,8 @@ CORS(app)
 @app.route("/")
 @app.route("/home")
 def home():
-    posts = Post.query.all()
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.paginate(per_page=5)
     return render_template('home.html', posts=posts)
 
 
@@ -153,5 +154,12 @@ def update_post(post_id):
 @app.route("/<int:post_id>/delete", methods=['POST'])
 @login_required
 def delete_post(post_id):
-    """Delete a post
+    """Delete a post after verification
     """
+    post = Post.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your Post has been deleted Bruh')
+    return redirect(url_for('home'))
