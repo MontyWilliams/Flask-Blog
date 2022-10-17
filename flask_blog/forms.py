@@ -77,7 +77,7 @@ class PostForm(FlaskForm):
     submit = SubmitField('Post')
 
 
-class requestResetForm(FlaskForm):
+class RequestResetForm(FlaskForm):
     """ form for changing password
     """
     email = StringField('Email',
