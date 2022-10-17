@@ -2,11 +2,17 @@ from flask_blog import db, login_manager, app
 from datetime import datetime
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-""" These are all the models
+""" These are all the models used in the db
+    - The serializer is used to handle password
+    - Date time is used tko add time stamps to posts
+    - login_manager privides user session management for Flask
 """
 
 @login_manager.user_loader
 def load_user (user_id):
+    """ the module stores user id's in session and reminds me of reacts
+        state and context management
+    """
     return User.query.get(int(user_id))
 
 
