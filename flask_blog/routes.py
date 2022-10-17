@@ -173,4 +173,4 @@ def user_posts(str:username):
     posts = Post.query.filter_by(author=user)\
         .order_by(Post.date_posted.desc())\
         .paginate(per_page=5)
-    return render_template('home.html', posts=posts)
+    return render_template('user_posts.html', posts=posts, user=user)
