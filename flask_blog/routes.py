@@ -19,7 +19,8 @@ CORS(app)
 @app.route("/home")
 def home():
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.paginate(per_page=5)
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(per_page=5)
+    print(Post)
     return render_template('home.html', posts=posts)
 
 
