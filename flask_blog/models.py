@@ -1,6 +1,7 @@
 from flask_blog import db, login_manager
 from datetime import datetime
 from flask_login import UserMixin
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 """ These are all the models
 """
 
