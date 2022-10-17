@@ -5,12 +5,13 @@ import os
 from PIL import Image
 from requests import post
 from flask_blog.models import User, Post
-from flask_blog import app, db, bcrypt
+from flask_blog import app, db, bcrypt, mail
 from flask_cors import CORS
 from flask import render_template, url_for, flash, redirect, request, abort
 from flask_blog.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
                               PostForm, RequestResetForm, ResetPasswordForm)
 from flask_login import login_user, current_user, logout_user, login_required
+from flask_mail import Message
 
 """ This is the routing page for the new modular design
 """
@@ -176,12 +177,21 @@ def user_posts(username):
         .paginate(per_page=5)
     return render_template('user_posts.html', posts=posts, user=user)
 
+def send_reset_email(user):
+    """ for now a dummy function that sends a reset email"""
+    pass
+
 
 @app.route("/reset_password", methods=['GET', 'POST'])
 def reset_request():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('email sent with instructions', 'info')
+        return redirect(url_for('login'))
     return render_template('reset_request.html', title='Reset Password', form=form)
 
 
@@ -191,7 +201,7 @@ def reset_token(token):
         return redirect(url_for('home'))
     user = User.verify_reset_token(token)
     if not user:
-        flash('U took to long, token expired Bruh')
+        flash('You got a invalid or expired token Bruh')
         return redirect(url_for('reset_request'))
     form = ResetPasswordForm()
     return render_template('reset_token.html', title='Reset Password', form=form)
