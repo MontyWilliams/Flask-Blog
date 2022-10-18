@@ -1,4 +1,5 @@
-from flask_blog import db, login_manager, app
+from flask_blog import db, login_manager
+from flask import current_app
 from datetime import datetime
 from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
@@ -17,7 +18,7 @@ def load_user (user_id):
 
 
 class User(db.Model, UserMixin):
-    """ User db model for users in the app
+    """ User db model for users in the current_app
     """
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -30,7 +31,7 @@ class User(db.Model, UserMixin):
         """ Reset token using serialization for hanldling secure password
             they will have 30 mins to reset their password
         """
-        s = Serializer(app.config['SECRET_KEY'], expires_sec)
+        s = Serializer(current_app.config['SECRET_KEY'], expires_sec)
         return s.dumps({'user_id': self.id}).decode('utf8')
 
     @staticmethod
@@ -40,7 +41,7 @@ class User(db.Model, UserMixin):
             - handles fail case
             - because it dosent use the anything from its class 
         """
-        s = Serializer(app.config['SECRET_KEY'])
+        s = Serializer(current_app.config['SECRET_KEY'])
         try:
             user_id = s.loads(token)['user_id']
         except:
