@@ -28,6 +28,7 @@ class User(db.Model, UserMixin):
 
     def get_reset_token(self, expires_sec=1800):
         """ Reset token using serialization for hanldling secure password
+            they will have 30 mins to reset their password
         """
         s = Serializer(app.config['SECRET_KEY'], expires_sec)
         return s.dumps({'user_id': self.id}).decode('utf8')
@@ -35,7 +36,9 @@ class User(db.Model, UserMixin):
     @staticmethod
     def verify_reset_token(token):
         """ verify token by trying to mimic values
-    
+            - Tries to get user_id to verify that serialization is correct
+            - handles fail case
+            - because it dosent use the anything from its class 
         """
         s = Serializer(app.config['SECRET_KEY'])
         try:
